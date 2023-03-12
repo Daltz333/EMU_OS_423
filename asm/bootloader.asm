@@ -38,8 +38,13 @@ start:
 	jmp 0x0001:0x2345	;Run program on sector 1, ex:bx
 	
 continue:
-	int 10h
+	;Clear registers
+	mov ax, 0
+	mov bx, 0
+	mov cx, 0
+	mov dx, 0
 	call cls
+	int 20h
 
 cls:
 	mov ah,06h		;Function 06h (scroll screen)
@@ -53,18 +58,6 @@ cls:
 					;Colors from 0: Black Blue Green Cyan Red Magenta Brown White
 					;Colors from 8: Gray LBlue LGreen LCyan LRed LMagenta Yellow BWhite
 					;Only 8 colors for background, 16 for cursor
-
-;;display string
-	mov ah,13h		;Function 13h (display string), XT machine only
-	mov al,1		;Write mode is zero: cursor stay after last char
-	mov bh,0		;Use video page of zero
-	mov bl,0ah		;Attribute (lightgreen on black)
-	mov cx,mlen		;Character string length
-	mov dh,1		;Position on row 0
-	mov dl,0		;And column 0
-	lea bp,[msg]	;Load the offset address of string into BP, es:bp
-					;Same as mov bp, msg  
-	int 10h
 	ret
 
 msg db 'OS423, a real OS, version 0.2 (c) compsci emich 2023 ...',10,13,'$'
