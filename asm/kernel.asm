@@ -6,7 +6,6 @@ call CLS
 call PRINT_CENTER_BLOB
 call PRINT_SPLASH
 
-;;restore stack before returning to mbr;
 retf
 
 PRINT_SPLASH:

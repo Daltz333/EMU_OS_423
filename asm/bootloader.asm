@@ -31,13 +31,14 @@ start:
 	int 13h
 
 	push cs
-	mov ax, [continue]
+	lea ax, [continue]
 	push ax
 	jmp 0x0001:0x2345	;Run program on sector 1, ex:bx
 	
 continue:
 	call cls
 	call print_str
+	int 20h
 
 cls:
 	mov ah,06h		;Function 06h (scroll screen)
