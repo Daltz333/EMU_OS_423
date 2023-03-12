@@ -41,9 +41,9 @@ after_splash:
 	mov es, bx
 	mov bx, 0x3456
 	mov ah, 02h				;Function 02h (read sector)
-	mov al, 2				;Read two sectors
-	mov ch, 0				;Cylinder#
-	mov cl, 39				;Sector# --> 38 (39-1) has program
+	mov al, 1				;Read two sectors
+	mov ch, 1				;Cylinder#
+	mov cl, 2				;Sector# --> 38 (39-1) has program
 	mov dh, 0				;Head# --> logical sector 1
 	mov dl, 0				;Drive# A, 08h=C
 	int 13h
@@ -54,6 +54,36 @@ after_splash:
 	jmp 0x0002:0x3456	;Run program
 
 after_dateutil:
+	;;load message
+	;;load datetime utility
+	mov ax, 0 ; set up disk access parameters (disk 0)
+	mov dl, 0 ; set up disk drive number
+	mov cx, 1 ; set up number of sectors to read
+	mov dh, 0 ; set up head number
+	mov dh, 0 ; set up starting track number
+	mov bx, buffer ; set up buffer for reading data
+	mov ax, 02h ; set up function code for read sector
+	mov es, ax ; set up ES segment register
+	mov ax, 40 ; set up starting sector number
+	int 13h ; call BIOS interrupt to read sector
+
+	mov si, buffer ; set up source index to point to buffer
+	mov cx, buffer_size ; set up counter for number of characters to print
+
+	jmp print_message
+
+print_message:
+	lodsb ; load byte at [si] into AL, increment SI
+    cmp al, 0 ; check if end of string (null byte)
+    je done ; if null byte, exit loop
+
+    mov ah, 0Eh ; set up function code for print character
+    int 10h ; call BIOS interrupt to print character
+	
+    jmp print_message ; continue loop
+
+done:
+	;mp cls
 	int 20h
 
 ;; CLS is a testing function
@@ -69,6 +99,8 @@ cls:
   int 10H	;BIOS Interrupt 10h (video services)
   ret
 
+buffer db 256 dup (0)
+buffer_size equ $-buffer
 padding	times 510-($-$$) db 0		;to make MBR 512 bytes
 bootSig	db 0x55, 0xaa		;signature (optional)
 

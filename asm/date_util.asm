@@ -3,20 +3,20 @@
 [ORG 100H]		;set addressing to begin at 100H
 
 start:
-  call date
-  call cvtmo
-  call cvtday
-  call cvtcent
-  call cvtyear
-  call dspdate
-  
-  call time
-  call cvthrs
-  call cvtmin
-  call cvtsec
-  call dsptime
+    call date
+    call cvtmo
+    call cvtday
+    call cvtcent
+    call cvtyear
+    call dspdate
 
-  retf ;return back to bootloader
+    call time
+    call cvthrs
+    call cvtmin
+    call cvtsec
+    call dsptime
+
+    retf ;return back to bootloader
 
 date:
     ;Get date from the system
@@ -86,7 +86,7 @@ cvtyear:
     mov [dtfld + 9],bh
     ret
 
-dtfld: db '00/00/0000'
+dtfld: db '00 00 0000'
 
 dspdate:
     ;Display the system date
@@ -95,10 +95,12 @@ dspdate:
     mov bh,0 ;Use video page of zero
     mov bl,0Fh ;Attribute
     mov cx,10 ;Character string is 10 long
-    mov dh,4 ;position on row 4
-    mov dl,0 ;and column 28
+    mov dh,22 ;position on row 4
+    mov dl,35 ;and column 28
     push ds ;put ds register on stack
     pop es ;pop it into es register
+    mov byte [dtfld + 2], 47
+    mov byte [dtfld + 5], 47
     lea bp,[dtfld] ;load the offset address of string into BP
     int 10H
     ret
@@ -165,8 +167,10 @@ dsptime:
     mov bh,0 ;Use video page of zero
     mov bl,0Fh ;Attribute
     mov cx,8 ;Character string is 8 long
-    mov dh,5 ;position on row 5
-    mov dl,0 ;and column 28
+    mov dh,21 ;position on row 4
+    mov dl,36 ;and column 28
+    mov byte [tmfld + 2], 58
+    mov byte [tmfld + 5], 58
     push ds ;put ds register on stack
     pop es ;pop it into es register
     lea bp,[tmfld] ;load the offset address of string into BP
