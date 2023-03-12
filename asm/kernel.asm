@@ -7,13 +7,7 @@ call PRINT_CENTER_BLOB
 call PRINT_SPLASH
 
 ;;restore stack before returning to mbr;
-pop dx
-pop ax
-
-mov word [ADDR+2], dx
-mov word [ADDR], ax
-
-jmp far [ADDR]
+retf
 
 PRINT_SPLASH:
 	;; Print borders

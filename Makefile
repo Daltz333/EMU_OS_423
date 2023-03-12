@@ -22,7 +22,7 @@ LDR_BIN     = $(subst .asm,.bin,$(LDR_SRC))
 
 everything : pre-build $(BUILD_DIR)/$(MBR_BIN) $(BUILD_DIR)/$(LDR_BIN) $(IMG)
 	dd if=$(BUILD_DIR)/$(MBR_BIN) of=$(BUILD_DIR)/$(IMG) bs=512 count=1 conv=notrunc
-	dd if=$(BUILD_DIR)/$(LDR_BIN) of=$(BUILD_DIR)/$(IMG) bs=512 count=1 seek=1 conv=notrunc
+	dd if=$(BUILD_DIR)/$(LDR_BIN) of=$(BUILD_DIR)/$(IMG) bs=512 count=2 seek=1 conv=notrunc
 
 pre-build:
 	mkdir -p $(BUILD_DIR)
