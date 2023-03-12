@@ -54,7 +54,6 @@ after_splash:
 	jmp 0x0002:0x3456	;Run program
 
 after_dateutil:
-	call cls
 	int 20h
 
 ;; CLS is a testing function
