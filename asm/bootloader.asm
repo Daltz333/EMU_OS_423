@@ -38,10 +38,8 @@ start:
 	jmp 0x0001:0x2345	;Run program on sector 1, ex:bx
 	
 continue:
-	int 20h
+	int 10h
 	call cls
-
-	int 20h
 
 cls:
 	mov ah,06h		;Function 06h (scroll screen)

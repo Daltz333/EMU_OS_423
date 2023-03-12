@@ -7,10 +7,11 @@ call PRINT_CENTER_BLOB
 call PRINT_SPLASH
 
 ;;restore stack before returning to mbr;
+pop dx
 pop ax
-mov ax, WORD [ADDR]
-pop cs
-mov cs, WORD [ADDR+2]
+
+mov word [ADDR+2], dx
+mov word [ADDR], ax
 
 jmp far [ADDR]
 
@@ -279,8 +280,9 @@ PRINT_EXIT:
 	int 10h
 	ret
 
-
-ADDR dd 00000000h
+ADDR dd 0x0000000
+ADDR_UP dw 0000h
+ADDR_BOT dw 0000h
 osmsg db 'Another Unnamed OS',0
 osmsglen equ $-osmsg
 osmsgauth db 'Dalton Smith',0
